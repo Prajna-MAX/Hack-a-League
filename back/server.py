@@ -77,17 +77,6 @@ def get_seats():
     seats = list(seats_collection.find({}, {"_id": 0}))
     return jsonify(seats)
 
-@app.route('/api/book/<seat_id>', methods=['POST'])
-def book_seat(seat_id):
-    seat = seats_collection.find_one({"_id": ObjectId(seat_id)})
-    if not seat:
-        return jsonify({"error": "Seat not found"}), 404
-
-    if seat["status"] == "booked":
-        return jsonify({"error": "Seat already booked"}), 400
-
-    seats_collection.update_one({"_id": ObjectId(seat_id)}, {"$set": {"status": "booked"}})
-    return jsonify({"message": "Seat booked successfully", "seatId": seat_id}), 200
 
 @app.route("/api/seats/reserve", methods=["POST"])
 def reserve_seat():
@@ -108,7 +97,16 @@ def reserve_seat():
 
     return jsonify({"message": "Seats reserved successfully!"}), 201
 
+@app.route("/api/seats/get-booked", methods=["POST"])
+def get_booked_seats():
+    data = request.json
+    date = data.get("date")
 
+    if not date:
+        return jsonify({"error": "Date is required"}), 400
+
+    booked_seats = list(seats_collection.find({"date": date}, {"_id": 0, "row": 1, "col": 1}))
+    return jsonify({"bookedSeats": booked_seats}), 200
 
 @app.route('/api/available-seats/<int:num_seats>', methods=['GET'])
 def get_available_seats(num_seats):

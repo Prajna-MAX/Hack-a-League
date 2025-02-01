@@ -33,10 +33,6 @@ function Home() {
       <h3>Book a Seat</h3>
       <p>Reserve a seat at your convenience for the day or week.</p>
     </button>
-    <div className="feature-card">
-      <h3>My Bookings</h3>
-      <p>Manage and view your seat bookings.</p>
-    </div>
   </section>
 
   
