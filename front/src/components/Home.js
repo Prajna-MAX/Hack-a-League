@@ -1,45 +1,46 @@
-import React from 'react'
-import './Home.css'
+import React from 'react';
+import './Home.css';
 import { Link } from 'react-router-dom';
-
 
 function Home() {
   return (
     <div className='home'>
-   
+      <section className="intro">
+        <h2>Welcome to the Office Seat Management System</h2>
+        <p>Efficiently manage and book office seats for optimal space utilization and comfort.</p>
+      </section>
 
-  <section className="intro">
-    <h2>Welcome to the Office Seat Management System</h2>
-    <p>Efficiently manage and book office seats for optimal space utilization and comfort.</p>
-  </section>
+      <section className="features">
+        <div className="feature-card">
+          <h3>Seat Availability</h3>
+          <p>View real-time seat availability across multiple offices.</p>
+        </div>
+        <div className="feature-card">
+          <h3>Book a Seat</h3>
+          <p>Reserve a seat at your convenience for the day or week.</p>
+        </div>
+        <div className="feature-card">
+          <h3>My Bookings</h3>
+          <p>Manage and view your seat bookings.</p>
+        </div>
 
-  <section className="features">
-    <div className="feature-card">
-      <h3>Seat Availability</h3>
-      <p>View real-time seat availability across multiple offices.</p>
-    </div>
-    <div className="feature-card">
-      <h3>Book a Seat</h3>
-      <p>Reserve a seat at your convenience for the day or week.</p>
-    </div>
-    <div className="feature-card">
-      <h3>My Bookings</h3>
-      <p>Manage and view your seat bookings.</p>
-    </div>
- 
-    <div>
-      <h1>Welcome to Home</h1>
-      <Link to="/company-form">
-        <button>Go to Work Management</button>
-      </Link>
-    </div>
-  </section>
- 
+        <div>
+          <h1>Welcome to Home</h1>
+          <Link to="/company-form">
+            <button>Go to Work Management</button>
+          </Link>
+        </div>
 
-  
-  </div>
-
-  )
+        <div>
+          <h1>Welcome to the Office Space Allocation App</h1>
+          <p>Click the button below to calculate the office space allocation.</p>
+          <Link to="/office-space-calculator">
+            <button>Go to Office Space Calculator</button>
+          </Link>
+        </div>
+      </section>
+    </div>
+  );
 }
 
-export default Home
+export default Home;

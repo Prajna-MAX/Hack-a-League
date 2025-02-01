@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import WorkerTable from './WorkerList';
-import CalendarView from './CalendarView';
+import './CompanyForm.css';
 
 const CompanyForm = () => {
   const [companyName, setCompanyName] = useState('');
@@ -8,14 +8,6 @@ const CompanyForm = () => {
   const [seatsAvailable, setSeatsAvailable] = useState('');
   const [onlineWorkers, setOnlineWorkers] = useState([]);
   const [offlineWorkers, setOfflineWorkers] = useState([]);
-  const [workHistory, setWorkHistory] = useState(() => {
-    const savedHistory = localStorage.getItem('workHistory');
-    return savedHistory ? JSON.parse(savedHistory) : {};
-  });
-
-  useEffect(() => {
-    localStorage.setItem('workHistory', JSON.stringify(workHistory));
-  }, [workHistory]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -37,25 +29,16 @@ const CompanyForm = () => {
 
     setOnlineWorkers(online);
     setOfflineWorkers(offline);
-
-    updateCalendar(online, offline);
   };
 
   const generateEmployeeIds = (companyPrefix, count) => {
     return Array.from({ length: count }, (_, i) => `${companyPrefix.substring(0, 4).toUpperCase()}-${i + 1}`);
   };
 
-  const updateCalendar = (online, offline) => {
-    const today = new Date().toISOString().split('T')[0];
-    setWorkHistory((prev) => ({
-      ...prev,
-      [today]: { online, offline }
-    }));
-  };
-
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className="container">
+      <form className="form" onSubmit={handleSubmit}>
+        <h2>Company Worker Allocation</h2>
         <label>
           Company Name:
           <input
@@ -65,7 +48,6 @@ const CompanyForm = () => {
             required
           />
         </label>
-        <br />
         <label>
           Total Employees:
           <input
@@ -75,7 +57,6 @@ const CompanyForm = () => {
             required
           />
         </label>
-        <br />
         <label>
           Available Seats:
           <input
@@ -85,12 +66,9 @@ const CompanyForm = () => {
             required
           />
         </label>
-        <br />
         <button type="submit">Allocate Workers</button>
       </form>
-
       <WorkerTable onlineWorkers={onlineWorkers} offlineWorkers={offlineWorkers} />
-      <CalendarView workHistory={workHistory} />
     </div>
   );
 };

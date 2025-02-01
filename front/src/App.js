@@ -4,7 +4,8 @@ import { AuthProvider } from './components/context/AuthContext';
 import SignIn from './components/signup';
 import Login from './components/login';
 import Home from './components/Home';
-import CompanyForm from './components/CompanyForm'; // Import CompanyForm component
+import CompanyForm from './components/CompanyForm';
+import OfficeSpaceCalculator from './components/OfficeSpaceCalculator'; // Proper Import for OfficeSpaceCalculator
 
 function App() {
   return (
@@ -14,7 +15,8 @@ function App() {
           <Route path="/" element={<SignIn />} />
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/company-form" element={<CompanyForm />} /> {/* New Route */}
+          <Route path="/company-form" element={<CompanyForm />} />
+          <Route path="/office-space-calculator" element={<OfficeSpaceCalculator />} />
         </Routes>
       </Router>
     </AuthProvider>
