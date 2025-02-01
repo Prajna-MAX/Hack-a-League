@@ -1,5 +1,8 @@
 import React from 'react'
 import './Home.css'
+import { Link } from 'react-router-dom';
+
+
 function Home() {
   return (
     <div className='home'>
@@ -23,7 +26,15 @@ function Home() {
       <h3>My Bookings</h3>
       <p>Manage and view your seat bookings.</p>
     </div>
+ 
+    <div>
+      <h1>Welcome to Home</h1>
+      <Link to="/company-form">
+        <button>Go to Work Management</button>
+      </Link>
+    </div>
   </section>
+ 
 
   
   </div>
