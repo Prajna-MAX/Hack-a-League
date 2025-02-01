@@ -1,76 +1,162 @@
 /* SignIn Page Styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f7f7f7;
+    font-family: 'Roboto', sans-serif; /* Using Roboto font */
+    background-color: #f0f2f5; /* Light background */
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh; /* Use min-height for shorter content */
   }
   
   .container {
-    background-color: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
+    background-color: #fff; /* White container */
+    padding: 40px; /* Increased padding */
+    border-radius: 12px; /* Slightly more rounded */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* More subtle shadow */
+    width: 90%; /* Use a percentage for responsiveness */
+    max-width: 600px; /* Adjusted max width for table */
+    margin: 20px; /* Added margin for spacing */
   }
   
   h2 {
     text-align: center;
-    margin-bottom: 20px;
-    color: #333;
+    margin-bottom: 25px; /* Increased bottom margin */
+    color: #2c3e50; /* Darker heading color */
+    font-size: 28px; /* Slightly larger font size */
+    font-weight: 500; /* Lighter font weight */
   }
   
   label {
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #555;
+    font-size: 15px; /* Slightly larger font size */
+    font-weight: 500; /* Lighter font weight */
+    margin-bottom: 7px; /* Slightly increased margin */
+    color: #4a6572; /* Dark label color */
+    display: block; /* Display labels as blocks */
   }
   
   input[type="text"],
   input[type="password"],
   select {
     width: 100%;
-    padding: 10px;
-    margin: 10px 0 20px 0;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-    color: #333;
+    padding: 12px; /* Increased padding */
+    margin: 8px 0 20px 0; /* Changed margin to be uniform */
+    border-radius: 8px; /* More rounded borders */
+    border: 1px solid #d9d9d9; /* Light gray border */
+    font-size: 16px; /* Slightly larger font size */
+    color: #2c3e50; /* Darker input color */
+    box-sizing: border-box; /* Include padding in width */
+    transition: border-color 0.3s ease; /* Smooth border transition */
+  }
+  
+  input[type="text"]:focus,
+  input[type="password"]:focus,
+  select:focus {
+    outline: none; /* Remove default outline */
+    border-color: #2ecc71; /* Green border on focus */
+    box-shadow: 0 0 5px rgba(46, 204, 113, 0.5); /* Add a subtle box shadow on focus */
   }
   
   input[type="submit"] {
     width: 100%;
-    padding: 10px;
-    background-color: #4CAF50;
+    padding: 13px; /* Increased padding */
+    background-color: #2ecc71; /* Primary button color */
     color: white;
     border: none;
-    border-radius: 5px;
-    font-size: 16px;
+    border-radius: 8px; /* More rounded borders */
+    font-size: 17px; /* Slightly larger font size */
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+    font-weight: 500; /* Lighter font weight */
+    letter-spacing: 0.5px; /* Slight letter spacing */
   }
   
   input[type="submit"]:hover {
-    background-color: #45a049;
+    background-color: #27ae60; /* Darker green on hover */
+    transform: translateY(-1px); /* Slight push on hover */
+  }
+  
+  input[type="submit"]:active {
+    transform: translateY(0); /* Reset transform on click */
+    background-color: #27ae60;
   }
   
   .link {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 25px; /* Increased margin */
   }
   
   .link a {
-    color: #007BFF;
+    color: #3498db; /* Link color */
     text-decoration: none;
+    transition: color 0.3s ease; /* Smooth color transition */
   }
   
   .link a:hover {
     text-decoration: underline;
+    color: #2980b9; /* Darker color on hover */
   }
   
+  /* Table Styles for Seats */
+  .seat-table {
+    width: 100%;
+    border-collapse: collapse; /* Remove space between cells */
+    margin-top: 20px; /* Add margin above the table */
+    border: 2px solid #2c3e50; /* Add border to the entire table */
+    border-radius: 8px; /* Rounded corners for the table */
+    overflow: hidden; /* Ensure rounded corners are visible */
+  }
+  
+  .seat-table td {
+    width: 20%; /* 5 seats per row */
+    padding: 10px; /* Add padding inside each cell */
+    text-align: center; /* Center-align seat content */
+    border: 1px solid #d9d9d9; /* Add border to each cell */
+    transition: background-color 0.3s ease; /* Smooth background transition */
+  }
+  
+  .seat-table td:hover {
+    background-color: #f0f2f5; /* Light background on hover */
+  }
+  
+  /* Seat Styles */
+  .seat {
+    display: inline-block;
+    width: 40px; /* Fixed width for seats */
+    height: 40px; /* Fixed height for seats */
+    line-height: 40px; /* Center text vertically */
+    background-color: #2ecc71; /* Green background for available seats */
+    color: white; /* White text */
+    border-radius: 6px; /* Rounded corners for seats */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+  }
+  
+  .seat.booked {
+    background-color: #e74c3c; /* Red background for booked seats */
+    cursor: not-allowed; /* Disable cursor for booked seats */
+  }
+  
+  .seat:hover:not(.booked) {
+    background-color: #27ae60; /* Darker green on hover */
+    transform: translateY(-2px); /* Slight lift on hover */
+  }
+  
+  /* Adding some responsive adjustments */
+  @media (max-width: 500px) {
+    .container {
+      padding: 25px;
+      max-width: 95%;
+    }
+  
+    .seat-table td {
+      padding: 5px; /* Reduce padding for smaller screens */
+    }
+  
+    .seat {
+      width: 30px; /* Smaller seats for smaller screens */
+      height: 30px;
+      line-height: 30px;
+    }
+  }
