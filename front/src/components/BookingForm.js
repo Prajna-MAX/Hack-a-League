@@ -1,140 +1,170 @@
 import React, { useState, useEffect } from 'react';
-import './BookingForm.css'
-const BookingForm = ({ selectedSeat, onSubmit }) => {
-  // Ensure that preferences are initialized with default values
-  const [preferences, setPreferences] = useState({
-    purpose: '', // Purpose of booking
-    team: '', // Team selection
-    userType: 'visitor', // Default to 'visitor' or 'internal'
-    zone: '' // Zone preference
+
+function DepartmentForm() {
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({
+    departmentName: '',
+    numSeats: 1,
+    purpose: '',
+    headOfDepartment: '',
+    faculty: '',
   });
+  const [seats, setSeats] = useState([]); // Seat grid
+  const [availableSeats, setAvailableSeats] = useState([]); // Available seats from backend
+  const [bookedSeats, setBookedSeats] = useState([]); // Track booked seats
 
-  // Handle case when selectedSeat is null or undefined
-  if (!selectedSeat) {
-    return <p>Loading seat information...</p>; // Optionally, show loading or an error message
-  }
+  useEffect(() => {
+    fetchBookedSeats(); // Fetch booked seats when component mounts
+  }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit({ ...selectedSeat, preferences });
+  // Handle input change
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    if (name === "numSeats") {
+      fetchAvailableSeats(Number(value));
+    }
   };
 
-  const handlePreferenceChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setPreferences({
-      ...preferences,
-      [name]: type === 'checkbox' ? checked : value
-    });
+  // Fetch available seats from backend
+  const fetchAvailableSeats = async (numSeats) => {
+    try {
+      const response = await fetch("http://localhost:5000/api/available-seats/${numSeats}");
+      if (response.ok) {
+        const data = await response.json();
+        setAvailableSeats(data);
+      } else {
+        setAvailableSeats([]);
+      }
+    } catch (error) {
+      console.error('Error fetching available seats:', error);
+      setAvailableSeats([]);
+    }
+  };
+
+  // Fetch already booked seats from backend (or store locally)
+  const fetchBookedSeats = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/booked-seats");
+      if (response.ok) {
+        const data = await response.json();
+        setBookedSeats(data);
+      }
+    } catch (error) {
+      console.error('Error fetching booked seats:', error);
+    }
+  };
+
+  // Function to book seats and update the state
+  const bookSeats = async (numSeats) => {
+    let newBookedSeats = [...bookedSeats];
+    
+    // Determine new seat numbers based on existing bookings
+    let seatCounter = 1;
+    while (newBookedSeats.length < numSeats) {
+      if (!newBookedSeats.includes(seatCounter)) {
+        newBookedSeats.push(seatCounter);
+      }
+      seatCounter++;
+    }
+
+    setBookedSeats(newBookedSeats); // Update state
+
+    // Send updated booked seats to backend (optional)
+    try {
+      await fetch("http://localhost:5000/api/book-seat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bookedSeats: newBookedSeats }),
+      });
+    } catch (error) {
+      console.error("Error booking seats:", error);
+    }
+  };
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!formData.departmentName || !formData.purpose) {
+      alert("Department Name and Purpose are required!");
+      return;
+    }
+
+    // Book seats
+    bookSeats(Number(formData.numSeats));
+
+    console.log("Department Data:", formData);
+    setShowForm(false);
+    alert("Department details submitted (check console)");
   };
 
   return (
-    <form onSubmit={handleSubmit} className="booking-form">
-      {/* Show seat number if it exists */}
-      <h2>Book Seat {selectedSeat.number || 'Not Available'}</h2>
+    <div className="container">
+      {!showForm && (
+        <div>
+          <h1>Create Department</h1>
+          <button onClick={() => setShowForm(true)}>Create New Department</button>
+        </div>
+      )}
 
-      {/* User Type Radio Buttons */}
-      <div className="form-group">
-        <label className="form-label">User Type:</label>
-        <div className="radio-group">
-          <label>
+      {showForm && (
+        <div id="departmentForm">
+          <form onSubmit={handleSubmit}>
+            <label htmlFor="departmentName">Department Name:</label>
             <input
-              type="radio"
-              name="userType"
-              value="visitor"
-              checked={preferences.userType === 'visitor'}
-              onChange={handlePreferenceChange}
-            />
-            Visitor
-          </label>
-          <label>
+              type="text"
+              id="departmentName"
+              name="departmentName"
+              value={formData.departmentName}
+              onChange={handleInputChange}
+              required
+            /><br /><br />
+
+            <label htmlFor="numSeats">Number of Seats:</label>
             <input
-              type="radio"
-              name="userType"
-              value="internal"
-              checked={preferences.userType === 'internal'}
-              onChange={handlePreferenceChange}
-            />
-            Internal
-          </label>
+              type="number"
+              id="numSeats"
+              name="numSeats"
+              value={formData.numSeats}
+              onChange={handleInputChange}
+              min="1"
+              required
+            /><br /><br />
+
+            <label htmlFor="purpose">Purpose:</label>
+            <textarea
+              id="purpose"
+              name="purpose"
+              value={formData.purpose}
+              onChange={handleInputChange}
+              rows="4"
+              required
+            ></textarea><br /><br />
+
+            <button type="submit">Submit</button>
+            <button type="button" onClick={() => setShowForm(false)}>Cancel</button>
+          </form>
+        </div>
+      )}
+
+      {/* Seat Availability */}
+      <div className="seat-recommendation">
+        <h2>Booked Seats</h2>
+        <div className="booked-seats">
+          {bookedSeats.length > 0 ? (
+            <ul>
+              {bookedSeats.map((seat, index) => (
+                <li key={index}>Seat Number: {seat} (Booked)</li>
+              ))}
+            </ul>
+          ) : (
+            <p>No seats booked yet.</p>
+          )}
         </div>
       </div>
-
-      {/* Zone Radio Buttons */}
-      <div className="form-group">
-        <label className="form-label">Zone:</label>
-        <div className="radio-group">
-          <label>
-            <input
-              type="radio"
-              name="zone"
-              value="teamArea"
-              checked={preferences.zone === 'teamArea'}
-              onChange={handlePreferenceChange}
-            />
-            Team Area
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="zone"
-              value="individualZone"
-              checked={preferences.zone === 'individualZone'}
-              onChange={handlePreferenceChange}
-            />
-            Individual Zone
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="zone"
-              value="visitorZone"
-              checked={preferences.zone === 'visitorZone'}
-              onChange={handlePreferenceChange}
-            />
-            Visitor Zone
-          </label>
-        </div>
-      </div>
-
-      {/* Purpose Dropdown */}
-      <label className="form-label">
-        Purpose:
-        <select
-          name="purpose"
-          value={preferences.purpose}
-          onChange={handlePreferenceChange}
-          className="form-select"
-        >
-          <option value="">Select purpose</option>
-          <option value="collaborate">Collaborate</option>
-          <option value="presentation">Presentation</option>
-          <option value="teamDiscussion">Team Discussion</option>
-        </select>
-      </label>
-
-      {/* Team Dropdown */}
-      <label className="form-label">
-        Sit with Team:
-        <select
-          name="team"
-          value={preferences.team}
-          onChange={handlePreferenceChange}
-          className="form-select"
-        >
-          <option value="">Select Team</option>
-          <option value="teamA">Team A</option>
-          <option value="teamB">Team B</option>
-          <option value="teamC">Team C</option>
-        </select>
-      </label>
-
-      {/* Submit Button */}
-      <button type="submit" className="submit-button">
-        Book Seat
-      </button>
-    </form>
+    </div>
   );
-};
+}
 
-export default BookingForm;
-*/
+export default DepartmentForm;

@@ -7,6 +7,7 @@ import Home from './components/Home';
 import Seat from './components/Seat';
 import Deparments from './components/Departments';
 import Deptsform from './components/deptForm'
+
 function App() {
   return (
     <AuthProvider> 

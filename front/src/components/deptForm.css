@@ -1,0 +1,34 @@
+.seat-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 seats per row */
+    gap: 10px;
+    max-width: 300px; /* Adjust as needed */
+    margin: auto;
+  }
+  
+  .seat {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .seat.available {
+    background-color: #28a745; /* Green for available */
+  }
+  
+  .seat.booked {
+    background-color: #dc3545; /* Red for booked */
+  }
+  
+  .seat:hover {
+    opacity: 0.8;
+  }
+  
