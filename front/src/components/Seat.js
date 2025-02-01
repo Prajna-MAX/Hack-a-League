@@ -1,74 +1,104 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
-import BookingForm from './BookingForm';
-import './seat.css'
+import './seat.css';
 
+const rows = 5;
+const cols = 5;
 
-const SeatMap = ({ seats, onSeatSelect }) => {
-    console.log("Fetched Seats Data:", seats);  // Check the data in the console
-  
-    if (!seats || seats.length === 0) {
-      return <p>No seats available</p>;  
-    }
-  
-    return (
-      <div className="seat-map">
-        {seats.map((seat) => (
-          <div
-            key={seat._id}  // Ensure key is unique
-            className={`seat ${seat.status}`} // Conditional classes based on status
-            onClick={() => onSeatSelect(seat)}  // Handle click to select a seat
-          >
-           <p> {seat.name} </p> 
-          </div>
-        ))}
-      </div>
-    );
-  };
-  
+function Seat() {
+  const [seats, setSeats] = useState(Array(rows).fill(null).map(() => Array(cols).fill(false)));
+  const [bookedSeats, setBookedSeats] = useState([]); // Stores seats already booked for selected date
+  const [selectedDate, setSelectedDate] = useState(new Date()); // Default to today's date
+  const navigate = useNavigate();
 
-
-const Seat = () => {
-  const [seats, setSeats] = useState([]);
-  const [selectedSeat, setSelectedSeat] = useState(null);
-  const [showBookingForm, setShowBookingForm] = useState();
-
+  // Fetch booked seats from backend when date changes
   useEffect(() => {
-    axios.get('http://localhost:5000/api/seats').then((response) => {console.log("seats fetched");setSeats(response.data)});
-  }, []);
+    axios.post('http://localhost:5000/api/seats/get-booked', { date: selectedDate })
+      .then(response => setBookedSeats(response.data.bookedSeats))
+      .catch(error => console.error("Error fetching booked seats:", error));
+  }, [selectedDate]);
 
-  const handleSeatSelect = (seat) => {
-    setSelectedSeat(seat);
+  // Toggle seat selection
+  const toggleSeat = (row, col) => {
+    if (bookedSeats.some(seat => seat.row === row && seat.col === col)) {
+      alert("This seat is already booked!");
+      return;
+    }
+
+    const updatedSeats = seats.map((seatRow, rIndex) =>
+      seatRow.map((seat, cIndex) =>
+        rIndex === row && cIndex === col ? !seat : seat
+      )
+    );
+    setSeats(updatedSeats);
   };
 
-  const handleBooking = (bookingData) => {
-    console.log(bookingData);
-    axios
-      .post('http://localhost:5000/api/book', bookingData)
-      .then((response) => {
-        alert('Seat booked successfully!');
-        setSelectedSeat(null);  // Reset selected seat after booking
-      })
-      .catch((error) => {
-        console.error('Error booking seat:', error);
-        alert('Failed to book the seat. Please try again.');
+  // Handle seat reservation
+  const handleReserveSeats = () => {
+    const selectedSeats = [];
+    seats.forEach((row, rowIndex) => {
+      row.forEach((seat, colIndex) => {
+        if (seat) {
+          selectedSeats.push({ row: rowIndex, col: colIndex });
+        }
       });
+    });
+
+    if (selectedSeats.length === 0) {
+      alert("No seats selected!");
+      return;
+    }
+
+    axios.post('http://localhost:5000/api/seats/reserve', {
+      date: selectedDate,
+      seats: selectedSeats
+    })
+      .then(response => {
+        alert(response.data.message);
+        setBookedSeats([...bookedSeats, ...selectedSeats]); // Update UI
+      })
+      .catch(error => console.error("Error reserving seats:", error));
   };
-  
 
   return (
-    <div>
-  <h1>Open Seating System</h1>
-  <SeatMap seats={seats} onSeatSelect={handleSeatSelect} />
-  <button onClick={() => setShowBookingForm(true)}>Dynamic Book</button>
+    <>
+      <div className="seat-recommendation">
+        <h2>Seat Reservation System</h2>
+        <p>Select a date and reserve your seats.</p>
 
-{showBookingForm && (
-  <BookingForm selectedSeat={selectedSeat} onSubmit={handleBooking} />
-)}
+        <DatePicker
+          selected={selectedDate}
+          onChange={date => setSelectedDate(date)}
+          dateFormat="yyyy-MM-dd"
+          minDate={new Date()} // Prevent past bookings
+        />
 
-  
-</div>
+        <div className="seat-grid">
+          {seats.map((row, rowIndex) => (
+            <div key={rowIndex} className="seat-row">
+              {row.map((isSelected, colIndex) => {
+                const isBooked = bookedSeats.some(seat => seat.row === rowIndex && seat.col === colIndex);
+                return (
+                  <div
+                    key={colIndex}
+                    className={`seat ${isBooked ? 'booked' : isSelected ? 'selected' : 'available'}`}
+                    onClick={() => toggleSeat(rowIndex, colIndex)}
+                  >
+                    {rowIndex * cols + colIndex + 1}
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+
+        <button onClick={handleReserveSeats}>Reserve Seats</button>
+      </div>
+    </>
   );
-};
+}
 
 export default Seat;
