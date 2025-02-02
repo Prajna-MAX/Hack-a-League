@@ -1,0 +1,61 @@
+/* Overall container */
+.departments-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f4f7fc;
+    padding: 20px;
+  }
+  
+  /* Title */
+  .departments-title {
+    font-size: 28px;
+    color: #003366;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Department buttons container */
+  .departments-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  /* Styling for department buttons */
+  .department-button {
+    background-color: white;
+    border: 2px solid #003366;
+    color: #003366;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+    text-align: center;
+  }
+  
+  .department-button:hover {
+    background-color: #003366;
+    color: white;
+    transform: translateY(-3px);
+  }
+  
+  /* Loading and error messages */
+  .loading-message,
+  .error-message {
+    font-size: 18px;
+    color: #003366;
+    text-align: center;
+    margin-top: 20px;
+  }
+  

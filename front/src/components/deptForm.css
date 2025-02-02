@@ -1,37 +1,162 @@
-.container{
+/* Overall container */
+.container {
     display: flex;
-}
-.seat-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr); /* 5 seats per row */
-    gap: 10px;
-    max-width: 300px; /* Adjust as needed */
-    margin: auto;
-  }
-  
-  .seat {
-    width: 50px;
-    height: 50px;
-    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    min-height: 100vh;
+    background-color: #f4f7fc;
+    padding: 20px;
+  }
+  
+  /* Header Styling */
+  h1 {
+    color: #003366;
+    font-size: 28px;
+    margin-bottom: 20px;
     text-align: center;
+  }
+  
+  /* Allocate Button */
+  button {
+    background-color: #003366;
+    color: white;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+  }
+  
+  button:hover {
+    background-color: #1f51f8;
+  }
+  
+  /* Department Form Styling */
+  #departmentForm {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    margin-top: 20px;
+  }
+  
+  label {
     font-size: 14px;
+    font-weight: 600;
+    color: #003366;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  input[type="number"],
+  input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-bottom: 15px;
+  }
+  
+  button[type="submit"] {
+    background-color: #003366;
+    width: 100%;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #1f51f8;
+  }
+  
+  button[type="button"] {
+    background-color: #ff4d4d;
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  button[type="button"]:hover {
+    background-color: #cc0000;
+  }
+  
+  /* Available Seats Section */
+  .seat-recommendation {
+    margin-top: 30px;
+    text-align: center;
+  }
+  
+  h2 {
+    font-size: 22px;
+    color: #003366;
+    margin-bottom: 15px;
+  }
+  
+  .available-seats {
+    background: white;
+    padding: 15px;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .available-seats ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .available-seats li {
+    background: #003366;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    font-size: 14px;
+  }
+  /* Available Seats Section */
+.seat-recommendation {
+    margin-top: 30px;
+    text-align: center;
+  }
+  
+  h2 {
+    font-size: 22px;
+    color: #003366;
+    margin-bottom: 15px;
+  }
+  
+  /* Styling for Available Seats Box */
+  .available-seats {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 250px; /* Reduced width */
+    max-width: 80%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  /* Styling for Seat Items */
+  .available-seats ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px; /* Adds spacing between seat items */
+    justify-content: center;
+  }
+  
+  .available-seats li {
+    background: #003366;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
+    width: 60px; /* Make seats smaller */
     font-weight: bold;
   }
   
-  .seat.available {
-    background-color: #28a745; /* Green for available */
-  }
-  
-  .seat.booked {
-    background-color: #dc3545; /* Red for booked */
-  }
-  
-  .seat:hover {
-    opacity: 0.8;
-  }
   

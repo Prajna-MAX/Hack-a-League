@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import './Departments.css'; // Import the new CSS file
 
 function Departments() {
   const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchDepartments = async () => {
       try {
@@ -25,19 +27,23 @@ function Departments() {
     fetchDepartments();
   }, []);
 
-  if (loading) return <p>Loading departments...</p>;
- 
+  if (loading) return <p className="loading-message">Loading departments...</p>;
+  if (error) return <p className="error-message">{error}</p>;
 
   return (
-    <div>
-      {departments.map((dept) => (
-        <button 
-          key={dept.id} 
-          onClick={() => navigate(`/deptform/${dept.id}`)} // Navigate to deptform with ID
-        >
-          {dept.name}
-        </button>
-      ))}
+    <div className="departments-container">
+      <h2 className="departments-title">Select a Department</h2>
+      <div className="departments-list">
+        {departments.map((dept) => (
+          <button 
+            key={dept.id} 
+            className="department-button"
+            onClick={() => navigate(`/deptform/${dept.id}`)} 
+          >
+            {dept.name}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
