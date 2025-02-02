@@ -39,10 +39,7 @@ function DepartmentForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.departmentName || !formData.purpose) {
-      alert("Department Name and Purpose are required!");
-      return;
-    }
+   
 
     console.log("Department Data:", formData);
     setFormData({
@@ -79,16 +76,7 @@ function DepartmentForm() {
                 min="1"
                 required
               />
-
-              <label htmlFor="faculty">Faculty (comma-separated):</label>
-              <input
-                type="text"
-                id="faculty"
-                name="faculty"
-                value={formData.faculty}
-                onChange={handleInputChange}
-              />
-
+            <div className="button-container"></div>
               <button type="submit">Submit</button>
               <button type="button" onClick={() => setShowForm(false)}>Cancel</button>
             </form>
