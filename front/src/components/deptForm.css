@@ -4,7 +4,7 @@
     align-items: center;
     padding: 20px;
     margin: 20px auto;
-    max-width: 600px;
+    max-width: 1000px;
     background-color: #008000;
 }
 
@@ -34,7 +34,7 @@ button:hover {
 #departmentForm {
     margin-top: 20px;
     width: 100%; /* Take up full width within the container */
-    max-width: 500px; /* Set maximum width for the form */
+    max-width: 1500px; /* Set maximum width for the form */
 }
 
 
