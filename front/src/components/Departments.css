@@ -1,61 +1,55 @@
-/* Overall container */
 .departments-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background-color: #f4f7fc;
     padding: 20px;
-  }
-  
-  /* Title */
-  .departments-title {
-    font-size: 28px;
-    color: #003366;
-    font-weight: bold;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  
-  /* Department buttons container */
-  .departments-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: center;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  
-  /* Styling for department buttons */
-  .department-button {
-    background-color: white;
-    border: 2px solid #003366;
-    color: #003366;
-    padding: 12px 20px;
-    font-size: 16px;
-    font-weight: bold;
+    background-color: #f0f8f0; /* Light green background */
     border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+.departments-title {
+    color: #008000; /* Darker green title */
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.departments-list {
+    display: flex;
+    flex-direction: column; /* Arrange buttons in a column */
+    align-items: stretch; /* Stretch buttons to full width */
+    width: 1000px;
+    max-width: 500px; /* Maximum width for the buttons */
+    
+}
+
+.department-button {
+    background-color: #ffffff; /* White button */
+    color: #008000; /* Dark green text */
+    border: 1px solid #008000; /* Dark green border */
+    padding: 10px 15px;
+    margin: 5px 0; /* Spacing between buttons */
+    border-radius: 4px;
     cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    min-width: 200px;
+    transition: background-color 0.3s ease, color 0.3s ease;
     text-align: center;
-  }
-  
-  .department-button:hover {
-    background-color: #003366;
-    color: white;
-    transform: translateY(-3px);
-  }
-  
-  /* Loading and error messages */
-  .loading-message,
-  .error-message {
-    font-size: 18px;
-    color: #003366;
+}
+
+.department-button:hover {
+    background-color: #008000; /* Dark green on hover */
+    color: #ffffff; /* White text on hover */
+}
+
+.loading-message {
+    color: #008000;
     text-align: center;
-    margin-top: 20px;
-  }
-  
+    margin: 20px;
+}
+
+.error-message {
+    color: #cc0000;
+    text-align: center;
+    margin: 20px;
+}
