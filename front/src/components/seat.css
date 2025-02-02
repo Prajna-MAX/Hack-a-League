@@ -1,41 +1,108 @@
-.seat-recommendation {
-    text-align: center;
-  }
-  
-  .seat-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 50px);
-    gap: 10px;
-    margin-top: 20px;
-  }
-  
-  .seat {
-    width: 50px;
-    height: 50px;
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100vh;
+  }
+  
+  .seat-recommendation {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  h2 {
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  p {
+    color: #666;
+    margin-bottom: 20px;
+  }
+  
+  /* Date Picker Styles */
+  .react-datepicker-wrapper {
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+  
+  .react-datepicker__input-container input {
+    padding: 10px;
     border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+  }
+  
+  /* Seat Grid Styles */
+  .seat-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .seat-row {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .seat {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
     cursor: pointer;
+    font-size: 14px;
     font-weight: bold;
+    transition: background-color 0.3s ease;
   }
   
   .seat.available {
-    background-color: #90ee90;  
+    background-color: #4caf50; /* Green for available seats */
+    color: white;
+  }
+  
+  .seat.available:hover {
+    background-color: #45a049; /* Darker green on hover */
   }
   
   .seat.selected {
-    background-color: #ffcc00;  
+    background-color: #ffeb3b; /* Yellow for selected seats */
+    color: black;
   }
   
   .seat.booked {
-    background-color: #ff6347;  
+    background-color: #f44336; /* Red for booked seats */
+    color: white;
     cursor: not-allowed;
   }
   
+  /* Reserve Button Styles */
   button {
-    padding: 10px;
-    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #2196f3; /* Blue for the button */
+    color: white;
+    border: none;
+    border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #1976d2; /* Darker blue on hover */
   }
