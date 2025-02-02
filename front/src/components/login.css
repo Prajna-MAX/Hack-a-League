@@ -1,105 +1,83 @@
-/* Login Page Styles */
-body {
-    font-family: 'Roboto', sans-serif; /* Using Roboto font */
-    background-color: #f0f2f5; /* Light background */
-    margin: 0;
-    padding: 0;
+.login-container {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    min-height: 100vh; /* Use min-height for shorter content */
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f0f8ff; /* Light blue background */
+    color: #001f3f; /* Dark blue text */
+    padding: 30px; /* Slightly more padding */
   }
   
-  .container {
-    background-color: #fff; /* White container */
-    padding: 40px; /* Increased padding */
-    border-radius: 12px; /* Slightly more rounded */
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* More subtle shadow */
-    width: 90%; /* Use a percentage for responsiveness */
-    max-width: 450px; /* Slightly larger max width */
-    margin: 20px; /* Added margin for spacing */
+  .login-title {
+    color: #1e90ff; /* Bright blue title */
+    font-size: 2.2rem; /* Slightly larger title */
+    margin-bottom: 30px; /* Slightly more margin */
+      text-shadow: 1px 1px 1px rgba(0,0,0,0.1); /* subtle text shadow */
   }
   
-  h2 {
-    text-align: center;
-    margin-bottom: 25px; /* Increased bottom margin */
-    color: #2c3e50; /* Darker heading color */
-    font-size: 28px; /* Slightly larger font size */
-    font-weight: 500; /* Lighter font weight*/
+  .login-form {
+    width: 90%;
+    max-width: 420px; /* Slightly wider form */
+    display: flex;
+    flex-direction: column;
+    padding: 25px; /* Slightly more padding */
+    background-color: #e6f0ff; /* Slightly lighter blue */
+    border-radius: 10px; /* Slightly more rounded */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Softer box shadow */
   }
   
-  label {
-    font-size: 15px; /* Slightly larger font size */
-    font-weight: 500; /* Lighter font weight*/
-    margin-bottom: 7px; /* Slightly increased margin */
-    color: #4a6572; /* Dark label color */
-    display: block; /* Display labels as blocks */
+  .form-group {
+    margin-bottom: 20px; /* Slightly more margin */
+    display: flex;
+    flex-direction: column;
   }
   
-  input[type="text"],
-  input[type="password"] {
-    width: 100%;
-    padding: 12px; /* Increased padding */
-    margin: 8px 0 20px 0; /* Changed margin to be uniform */
-    border-radius: 8px; /* More rounded borders */
-    border: 1px solid #d9d9d9; /* Light gray border */
-    font-size: 16px; /* Slightly larger font size */
-    color: #2c3e50; /* Darker input color */
-    box-sizing: border-box; /* Include padding in width */
-    transition: border-color 0.3s ease; /* Smooth border transition */
+  .login-label {
+    color: #001f3f; /* Dark blue labels */
+    margin-bottom: 8px;
+      display: block;
+     text-align: left;
+     font-weight: 500; /* Slight bold */
   }
   
-  input[type="text"]:focus,
-  input[type="password"]:focus {
-    outline: none; /* Remove default outline */
-    border-color: #3498db; /* Blue border on focus */
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5); /* Add a subtle box shadow on focus */
+  .login-input {
+    padding: 12px; /* Slightly more padding */
+    border: 1px solid #a6c8ff; /* Light blue border */
+    border-radius: 6px; /* Slightly more rounded */
+    background-color: #fff; /* White input */
+    color: #001f3f; /* Dark blue input text */
+    margin-bottom: 12px; /* Slightly more margin */
+      transition: border-color 0.3s ease;
   }
   
-  input[type="submit"] {
-    width: 100%;
-    padding: 13px; /* Increased padding */
-    background-color: #3498db; /* Primary button color */
-    color: white;
+  .login-input:focus {
+    outline: none;
+    border-color: #1e90ff; /* Bright blue border on focus */
+      box-shadow: 0 0 0 2px rgba(30, 144, 255, 0.2); /* subtle input shadow on focus */
+  }
+  
+  .login-button {
+    background-color: #1e90ff; /* Bright blue button */
+    color: #fff;
+    padding: 12px 20px; /* Slightly bigger button */
     border: none;
-    border-radius: 8px; /* More rounded borders */
-    font-size: 17px; /* Slightly larger font size */
+    border-radius: 6px; /* Slightly more rounded */
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
-    font-weight: 500; /* Lighter font weight*/
-    letter-spacing: 0.5px; /* Slight letter spacing */
+    transition: background-color 0.3s ease, transform 0.2s ease;
   }
   
-  input[type="submit"]:hover {
-    background-color: #2980b9; /* Darker blue on hover */
-    transform: translateY(-1px); /* Slight push on hover */
+  .login-button:hover {
+    background-color: #0077cc; /* Slightly darker blue on hover */
+    transform: translateY(-2px); /* Lift on hover */
   }
   
-  input[type="submit"]:active {
-      transform: translateY(0); /* Reset transform on click */
-      background-color: #2980b9;
+  .login-button:active {
+      transform: translateY(1px) /* Push on active */
   }
   
-  .link {
-    text-align: center;
-    margin-top: 25px; /* Increased margin */
-  }
-  
-  .link a {
-    color: #3498db; /* Link color */
-    text-decoration: none;
-    transition: color 0.3s ease; /* Smooth color transition */
-  }
-  
-  .link a:hover {
-    text-decoration: underline;
-      color: #2980b9; /* Darker color on hover */
-  }
-  
-  /* Adding some responsive adjustments */
-  @media (max-width: 500px) {
-      .container {
-         padding: 25px;
-          max-width: 95%;
-      }
+  .login-role {
+    margin-top: 25px; /* Slightly more margin */
+    font-style: italic;
+    color: #778899; /* Light gray for role message */
   }
