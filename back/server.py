@@ -1,31 +1,29 @@
-import os
+import bcrypt
 from flask import Flask, request, jsonify
-from flask_socketio import SocketIO
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
-from flask_jwt_extended import JWTManager, create_access_token
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from pymongo import MongoClient
 from dotenv import load_dotenv
+from bson.objectid import ObjectId
+import os
 
-
+# Load environment variables
 load_dotenv()
 
-
+# Initialize Flask app
 app = Flask(__name__)
-app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "your_secret_key") 
-CORS(app, supports_credentials=True)  
-socketio = SocketIO(app, cors_allowed_origins="http://localhost:3000")
-bcrypt = Bcrypt(app)
-jwt = JWTManager(app)
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "your_secret_key")
+CORS(app, supports_credentials=True)
 
-MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://root:root@hack-a-league.beala.mongodb.net/?retryWrites=true&w=majority&appName=hack-a-league")
+# MongoDB configuration
+MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://root:root@hack-a-league.beala.mongodb.net/?retryWrites=true&w=majority&appName=hack-a-league&tls=true")
 client = MongoClient(MONGO_URI)
 db = client["db"]
 users_collection = db["users"]
-
-@app.route("/")
-def home():
-    return jsonify({"message": "Server Running"}), 200
+seats_collection = db["seats"]
+bookings_collection = db["bookings"]
+departments_collection = db["departments"]
 
 # User Signup
 @app.route("/api/auth/signup", methods=["POST"])
@@ -73,11 +71,71 @@ def login():
     access_token = create_access_token(identity={"username": username, "role": user["role"]})
     return jsonify({"message": "Login successful", "access_token": access_token}), 200
 
-# WebSocket Event
-@socketio.on("message")
-def handle_message(message):
-    print(f"Received message: {message}")
-    socketio.send(f"Echo: {message}")
+# Get all seats
+@app.route('/api/seats', methods=['GET'])
+def get_seats():
+    seats = list(seats_collection.find({}, {"_id": 0}))
+    return jsonify(seats)
 
+
+@app.route("/api/seats/reserve", methods=["POST"])
+def reserve_seat():
+    data = request.json
+    date = data.get("date")
+    seats = data.get("seats")
+
+    if not date or not seats:
+        return jsonify({"error": "Date and seats are required"}), 400
+
+    for seat in seats:
+        row, col = seat["row"], seat["col"]
+
+        if seats_collection.find_one({"date": date, "row": row, "col": col}):
+            return jsonify({"error": f"Seat at {row},{col} is already booked!"}), 400
+
+        seats_collection.insert_one({"date": date, "row": row, "col": col, "is_occupied": True})
+
+    return jsonify({"message": "Seats reserved successfully!"}), 201
+
+@app.route("/api/seats/get-booked", methods=["POST"])
+def get_booked_seats():
+    data = request.json
+    date = data.get("date")
+
+    if not date:
+        return jsonify({"error": "Date is required"}), 400
+
+    booked_seats = list(seats_collection.find({"date": date}, {"_id": 0, "row": 1, "col": 1}))
+    return jsonify({"bookedSeats": booked_seats}), 200
+
+@app.route('/api/available-seats/<int:num_seats>', methods=['GET'])
+def get_available_seats(num_seats):
+    # Get all available seats from the 'seats' collection
+    available_seats_cursor = seats_collection.find({'status': 'available'})
+    
+    # Convert cursor to a list and limit to the requested number of seats
+    available_seats_list = list(available_seats_cursor)[:num_seats]
+    
+    # Only return the seat IDs or other relevant details
+    seat_numbers = [seat['seat_id'] for seat in available_seats_list]
+    
+    return jsonify(seat_numbers)
+
+
+
+@app.route('/api/departments', methods=['GET'])
+def get_departments():
+    try:
+        departments = list(departments_collection.find({}))
+        departments_list = [
+            {"id": str(dept["_id"]), "name": dept["name"]}
+            for dept in departments
+        ]
+        return jsonify(departments_list), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# Run the application
 if __name__ == "__main__":
-    socketio.run(app, debug=True, port=5000)
+    app.run(debug=True, port=5000)
