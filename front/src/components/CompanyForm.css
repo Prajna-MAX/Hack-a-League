@@ -1,0 +1,92 @@
+/* Container Styling */
+.container {
+  max-width: 1500px;
+  margin: 50px auto;
+  padding: 30px;
+  border-radius: 16px;
+  background: linear-gradient(to bottom right, #e0f7fa, #ffffff);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+}
+
+/* Headings */
+h2 {
+  text-align: center;
+  font-size: 32px;
+  color: #00796b;
+  margin-bottom: 30px;
+}
+
+h3 {
+  margin-top: 30px;
+  color: #0288d1;
+  font-size: 24px;
+}
+
+/* Paragraphs */
+p {
+  font-size: 18px;
+  color: #555;
+  margin: 8px 0;
+}
+
+/* Worker Table */
+.worker-table {
+  margin-top: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  background-color: #fafafa;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 150, 136, 0.2);
+}
+
+th, td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  background-color: #00bcd4;
+  color: white;
+  font-size: 18px;
+}
+
+td {
+  font-size: 16px;
+}
+
+/* Row Colors */
+tr:nth-child(even) {
+  background-color: #e0f7fa;
+}
+
+tr:hover {
+  background-color: #b2ebf2;
+  transition: 0.3s ease;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .container {
+    padding: 15px;
+  }
+
+  table, th, td {
+    font-size: 14px;
+  }
+
+  h2 {
+    font-size: 24px;
+  }
+
+  h3 {
+    font-size: 20px;
+  }
+}

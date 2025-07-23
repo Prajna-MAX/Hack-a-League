@@ -1,0 +1,97 @@
+.container {
+    display: flex;
+    flex-direction: column; /* Arrange content in a column */
+    align-items: center;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 1000px;
+    background-color: #008000;
+}
+
+
+h1 {
+    color: #008000; /* Darker green title */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+button {
+    background-color: #ffffff; /* White button */
+    color: #008000; /* Dark green text */
+    border: 1px solid #008000; /* Dark green border */
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button:hover {
+    background-color: #008000; /* Dark green on hover */
+    color: #ffffff; /* White text on hover */
+}
+
+#departmentForm {
+    margin-top: 20px;
+    width: 100%; /* Take up full width within the container */
+    max-width: 1500px; /* Set maximum width for the form */
+}
+
+
+#departmentForm form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#departmentForm label {
+    color: #008000;
+    margin-bottom: 5px;
+    display: block;
+    text-align: left;
+    width: 100%;
+}
+
+#departmentForm input[type="number"] {
+  margin-bottom: 15px;
+    padding: 8px;
+    border: 1px solid #008000;
+    color: #333;
+    width: 95%; /* Adjust input width */
+    box-sizing: border-box;
+}
+
+.seat-recommendation {
+    margin-top: 20px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+     width: 100%;
+        max-width: 500px; /* Maximum width for the seats area */
+}
+
+.seat-recommendation h2 {
+    color: #008000;
+    margin-bottom: 10px;
+}
+
+.available-seats ul {
+    list-style-type: none;
+    padding: 0;
+}
+.available-seats li {
+    background-color: #f0f8f0;
+    margin-bottom: 5px;
+    padding: 8px;
+    border-radius: 4px;
+    color:#008000;
+    border: 1px solid #008000;
+}
+.available-seats p {
+    color: #888;
+}
+#departmentForm .button-container {
+     margin-top: 10px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+}

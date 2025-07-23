@@ -1,75 +1,115 @@
-/* Login Page Styles */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f7f7f7;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  
-  .container {
-    background-color: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-  }
-  
-  h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  label {
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #555;
-  }
-  
-  input[type="text"],
-  input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0 20px 0;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-    color: #333;
-  }
-  
-  input[type="submit"] {
-    width: 100%;
-    padding: 10px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  input[type="submit"]:hover {
-    background-color: #0056b3;
-  }
-  
-  .link {
-    text-align: center;
-    margin-top: 20px;
-  }
-  
-  .link a {
-    color: #007BFF;
-    text-decoration: none;
-  }
-  
-  .link a:hover {
-    text-decoration: underline;
-  }
-  
+
+
+.container {
+  background: #1e1e2e; /* Darker blue-black background for the form */
+  padding: 40px 30px;
+  border-radius: 12px;
+  /* Subtle, sophisticated shadow with a hint of glow */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(80, 200, 255, 0.08);
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  animation: fadeIn 0.8s ease-out;
+  border: 1px solid rgba(255, 255, 255, 0.05); /* Very subtle light border */
+}
+
+
+
+h2 {
+  color: #1b2a2e; /* A vibrant, but not overly bright, light blue/cyan */
+  margin-bottom: 30px;
+  font-size: 2.5em; /* Slightly larger for impact */
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 10px rgba(139, 233, 253, 0.4); /* Matching subtle glow */
+}
+
+form div {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500; /* Medium weight */
+  color: #b3c2d4; /* Softer, muted blue-grey for labels */
+  font-size: 0.9em;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px 15px;
+  background-color: #2a2a3a; /* Dark background for inputs */
+  border: 1px solid #3a3a4a; /* Slightly lighter border */
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 1.1em;
+  color: #f0f0f0; /* Light text color for input values */
+  transition: all 0.3s ease;
+}
+
+input[type="text"]::placeholder,
+input[type="password"]::placeholder {
+  color: #888; /* Dimmer placeholder text */
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: #151e20; /* Accent color border on focus */
+  box-shadow: 0 0 10px rgba(45, 55, 57, 0.4); /* Glow on focus */
+  outline: none;
+  background-color: #343447; /* Slightly lighter background on focus */
+}
+
+button {
+  /* Gradient using the accent color */
+  background: linear-gradient(45deg, #6272a4 0%, #8be9fd 100%);
+  color: #1e1e2e; /* Dark text for button for strong contrast */
+  padding: 15px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-top: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4); /* Subtle shadow for depth */
+}
+
+button:hover {
+  /* More intense gradient and shadow on hover */
+  background: linear-gradient(45deg, #50618a 0%, #a4faff 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6), 0 0 25px rgba(139, 233, 253, 0.6); /* Stronger glow on hover */
+}
+
+.error {
+  color: #ff79c6; /* A soft, warm pink/purple for error messages */
+  margin-top: 20px;
+  font-weight: bold;
+  background-color: #3a1a2a; /* Darker background for error box */
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #ff79c6; /* Matching border */
+  animation: shake 0.5s ease-in-out;
+  box-shadow: 0 2px 8px rgba(255, 121, 198, 0.3); /* Soft glow for error */
+}
+
+
+p {
+  margin-top: 20px;
+  font-size: 1em;
+  color: #b3c2d4; /* Consistent muted blue-grey */
+}
+
+p strong {
+  color: #0d1d21; /* Accent color for the role text */
+  text-shadow: 0 0 5px rgba(139, 233, 253, 0.2); /* Subtle glow */
+}
+

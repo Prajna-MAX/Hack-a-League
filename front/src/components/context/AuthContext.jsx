@@ -1,30 +1,62 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
 
-// Create Auth Context
 export const AuthContext = createContext();
 
-// Custom Hook to use AuthContext
-export const useAuthContext = () => {
-  return useContext(AuthContext);
-};
-
-// AuthProvider Component
 export const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [role, setRole] = useState(null); // 'admin' or 'employee'
+  const [role, setRole] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const login = (username, password) => {
-    setIsLoggedIn(true);
-    setRole(username === 'admin' ? 'admin' : 'employee'); // Simple role check
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setIsAuthenticated(true);
+        setRole(decoded.sub?.role);
+      } catch (e) {
+        console.error('Invalid token');
+        localStorage.removeItem('token');
+        setIsAuthenticated(false);
+      }
+    }
+  }, []);
+
+  const login = async (username, password) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.access_token) {
+        localStorage.setItem('token', data.access_token);
+        const decoded = jwtDecode(data.access_token);
+        setRole(decoded.sub?.role);
+        setIsAuthenticated(true);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      return false;
+    }
   };
 
   const logout = () => {
-    setIsLoggedIn(false);
+    localStorage.removeItem('token');
     setRole(null);
+    setIsAuthenticated(false);
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, role, login, logout }}>
+    <AuthContext.Provider value={{ login, logout, role, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );

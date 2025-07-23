@@ -1,0 +1,120 @@
+/* General Layout */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7fb;
+    color: #333;
+  }
+  
+  h2 {
+    text-align: center;
+    color: #4caf50;
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+  
+  h3 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+  
+  /* Container for Form */
+  .container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 20px;
+    margin: 0 10%;
+    width:500;
+  }
+  
+  .input-group {
+    width: 45%;
+    margin-bottom: 20px;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 12px;
+    margin: 5px 0;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .input-group input[type="number"] {
+    margin-right: 10px;
+  }
+  
+  /* Button Styling */
+  button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Seat Grid Layout */
+  .seating-grid {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  
+  .seat {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  .seat.occupied {
+    background-color:skyblue;
+    color: white;
+  }
+  
+  .seat.available {
+    background-color:#45a049;
+    color: white;
+  }
+  
+  /* Energy Section */
+  .energy-summary {
+    background-color: #e8f5e9;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+  
+  .energy-summary p {
+    font-size: 18px;
+    margin: 5px 0;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .input-group {
+      width: 100%;
+    }
+  }
+  

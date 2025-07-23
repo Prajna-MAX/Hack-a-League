@@ -1,0 +1,75 @@
+.booking-form {
+    width: 500px; /* Set fixed width */
+    height: 700px; /* Set fixed height */
+    margin: 20px auto;
+    padding: 20px;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensures content is spaced evenly */
+}
+
+.booking-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #333;
+    margin-top: 5px;
+    transition: border-color 0.3s ease;
+}
+
+.form-select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+.submit-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase; /* Text in uppercase for emphasis */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow for depth */
+    outline: none;
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px); /* Slight elevation effect */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Deepen shadow on hover */
+}
+
+.submit-button:active {
+    background-color: #004085;
+    transform: translateY(1px); /* Button sinks a little when clicked */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Reset shadow */
+}
+
+.submit-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Add focus ring */
+}

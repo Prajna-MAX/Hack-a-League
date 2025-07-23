@@ -1,3 +1,4 @@
+from datetime import date, datetime
 import bcrypt
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -14,16 +15,18 @@ load_dotenv()
 # Initialize Flask app
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "your_secret_key")
-CORS(app, supports_credentials=True)
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
+
+app.config['JWT_SECRET_KEY'] = os.getenv("JWT_SECRET_KEY", "super-secret")
+jwt = JWTManager(app)
 
 # MongoDB configuration
-MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://root:root@hack-a-league.beala.mongodb.net/?retryWrites=true&w=majority&appName=hack-a-league&tls=true")
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
 client = MongoClient(MONGO_URI)
 db = client["db"]
 users_collection = db["users"]
 seats_collection = db["seats"]
 bookings_collection = db["bookings"]
-departments_collection = db["departments"]
 
 # User Signup
 @app.route("/api/auth/signup", methods=["POST"])
@@ -35,24 +38,24 @@ def signup():
     confirm_password = data.get("confirmPassword")
     role = data.get("role")
 
-    if not full_name or not username or not password or not confirm_password or not role:
+    if not all([full_name, username, password, confirm_password, role]):
         return jsonify({"error": "All fields are required"}), 400
-    
+
     if password != confirm_password:
         return jsonify({"error": "Passwords do not match"}), 400
 
     if users_collection.find_one({"username": username}):
         return jsonify({"error": "Username already exists"}), 400
 
-    hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
-    
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode("utf-8")
+
     new_user = {
         "fullName": full_name,
         "username": username,
         "password": hashed_password,
         "role": role
     }
-    
+
     users_collection.insert_one(new_user)
     return jsonify({"message": "User created successfully"}), 201
 
@@ -64,78 +67,95 @@ def login():
     password = data.get("password")
 
     user = users_collection.find_one({"username": username})
-    
-    if not user or not bcrypt.check_password_hash(user["password"], password):
+    if not user or not bcrypt.checkpw(password.encode('utf-8'), user["password"].encode('utf-8')):
         return jsonify({"error": "Invalid username or password"}), 401
 
     access_token = create_access_token(identity={"username": username, "role": user["role"]})
     return jsonify({"message": "Login successful", "access_token": access_token}), 200
 
-# Get all seats
-@app.route('/api/seats', methods=['GET'])
+@app.route("/api/seats", methods=["GET"])
 def get_seats():
-    seats = list(seats_collection.find({}, {"_id": 0}))
-    return jsonify(seats)
+    seats = seats_collection.find()
+    seat_list = []
+    for seat in seats:
+        seat["_id"] = str(seat["_id"])  # Convert ObjectId to string
+        seat_list.append(seat)
+    return jsonify({"seats": seat_list})
 
 
-@app.route("/api/seats/reserve", methods=["POST"])
+
+@app.route('/api/seats/get-booked', methods=['POST'])
+def get_booked_seats():
+    data = request.get_json()
+    date = data.get('date')
+
+    bookings = bookings_collection.find({ "date": date })
+    booked_seats = [b['seatId'] for b in bookings]
+
+    return jsonify({ "bookedSeats": booked_seats })
+
+
+@app.route('/api/seats/reserve', methods=['POST'])
 def reserve_seat():
     data = request.json
-    date = data.get("date")
-    seats = data.get("seats")
+    employee_id = data.get("employeeId")
+    seat_id = data.get("seatId")
+    date_str = data.get("date")  # format: 'YYYY-MM-DD'
 
-    if not date or not seats:
-        return jsonify({"error": "Date and seats are required"}), 400
+    if not (employee_id and seat_id and date_str):
+        return jsonify({"error": "Missing fields"}), 400
 
-    for seat in seats:
-        row, col = seat["row"], seat["col"]
+    existing =bookings_collection.find_one({
+        "seatId": seat_id,
+        "date": date_str
+    })
 
-        if seats_collection.find_one({"date": date, "row": row, "col": col}):
-            return jsonify({"error": f"Seat at {row},{col} is already booked!"}), 400
+    if existing:
+        return jsonify({"error": "Seat already booked"}), 409
 
-        seats_collection.insert_one({"date": date, "row": row, "col": col, "is_occupied": True})
+    bookings_collection.insert_one({
+        "employeeId": employee_id,
+        "seatId": seat_id,
+        "date": date_str
+    })
 
-    return jsonify({"message": "Seats reserved successfully!"}), 201
-
-@app.route("/api/seats/get-booked", methods=["POST"])
-def get_booked_seats():
-    data = request.json
-    date = data.get("date")
-
-    if not date:
-        return jsonify({"error": "Date is required"}), 400
-
-    booked_seats = list(seats_collection.find({"date": date}, {"_id": 0, "row": 1, "col": 1}))
-    return jsonify({"bookedSeats": booked_seats}), 200
-
-@app.route('/api/available-seats/<int:num_seats>', methods=['GET'])
-def get_available_seats(num_seats):
-    # Get all available seats from the 'seats' collection
-    available_seats_cursor = seats_collection.find({'status': 'available'})
-    
-    # Convert cursor to a list and limit to the requested number of seats
-    available_seats_list = list(available_seats_cursor)[:num_seats]
-    
-    # Only return the seat IDs or other relevant details
-    seat_numbers = [seat['seat_id'] for seat in available_seats_list]
-    
-    return jsonify(seat_numbers)
+    return jsonify({"message": "Seat reserved successfully"}), 200
 
 
+# Optional endpoint to populate initial 20 seats
+@app.route('/api/seats/populate', methods=['POST'])
+def populate_seats():
+    seats.delete_many({})
+    seats = []
+    for i in range(20):
+        seat = {
+            "seatId": f"S{i + 1}",
+            "row": i // 5,
+            "col": i % 5
+        }
+        seats.append(seat)
+    seats.insert_many(seats)
+    return jsonify({ "message": "seats populated." })
 
-@app.route('/api/departments', methods=['GET'])
-def get_departments():
-    try:
-        departments = list(departments_collection.find({}))
-        departments_list = [
-            {"id": str(dept["_id"]), "name": dept["name"]}
-            for dept in departments
-        ]
-        return jsonify(departments_list), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+# Allocation dashboard
+@app.route('/api/allocation-data', methods=['GET'])
+def get_allocation_data():
+    today_str = date.today().isoformat()
+    employees = list(users_collection.find({}, {"_id": 1, "fullName": 1}))
+    for e in employees:
+        e["id"] = str(e.pop("_id"))
 
+    reservations_cursor = bookings_collection.find({"date": today_str, "status": "booked"})
+    reserved_ids = [str(r['employeeId']) for r in reservations_cursor]
 
-# Run the application
+    seats_available = 25 - seats_collection.count_documents({"date": today_str, "status": "booked"})
+
+    return jsonify({
+        "companyName": "TCS",
+        "employees": employees,
+        "seatsAvailable": seats_available,
+        "reservations": reserved_ids
+    })
+
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
