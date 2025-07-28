@@ -10,35 +10,23 @@ const CompanyForm = () => {
   const [onlineWorkers, setOnlineWorkers] = useState([]);
   const [offlineWorkers, setOfflineWorkers] = useState([]);
 
-  const allocateWorkers = (employees, seatsAvailable, reservations) => {
-  const offline = [];
-  const online = [];
-  const reservationSet = new Set(reservations);
+  // Only use reservation list to determine online/offline
+  const allocateWorkers = (employees, reservations) => {
+    const offline = [];
+    const online = [];
 
-  // Step 1: Add reserved employees to offline
-  for (const emp of employees) {
-    if (reservationSet.has(emp.id)) {
-      offline.push(emp);
+    const reservationSet = new Set(reservations);
+
+    for (const emp of employees) {
+      if (reservationSet.has(emp.id)) {
+        offline.push(emp);
+      } else {
+        online.push(emp);
+      }
     }
-  }
 
-  // Step 2: Fill extra offline seats from remaining unbooked employees
-  for (const emp of employees) {
-    if (!reservationSet.has(emp.id) && offline.length < seatsAvailable) {
-      offline.push(emp);
-    }
-  }
-
-  // Step 3: Remaining go online
-  for (const emp of employees) {
-    if (!offline.includes(emp)) {
-      online.push(emp);
-    }
-  }
-
-  return { offline, online };
-};
-
+    return { offline, online };
+  };
 
   const fetchData = async () => {
     try {
@@ -49,11 +37,12 @@ const CompanyForm = () => {
       setSeatsAvailable(seatsAvailable);
       setEmployees(employees);
 
-      const { offline, online } = allocateWorkers(employees, seatsAvailable, reservations);
+      const { offline, online } = allocateWorkers(employees, reservations);
       setOfflineWorkers(offline);
       setOnlineWorkers(online);
     } catch (err) {
-      alert("Error fetching data.");
+      alert('Error fetching data.');
+      console.error(err);
     }
   };
 

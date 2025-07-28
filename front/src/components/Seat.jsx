@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './seat.css';
+import { useContext } from 'react';
+import { AuthContext } from './context/AuthContext';
+
+
 
 const Seat = () => {
+  const { employeeId } = useContext(AuthContext);
   const [seats, setSeats] = useState([]);
   const [bookedSeats, setBookedSeats] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedSeat, setSelectedSeat] = useState(null);
 
-  const employeeId = "emp001"; // For now, hardcoded
 
   // Fetch seats and bookings
   useEffect(() => {
+    console.log(employeeId)
     const fetchSeats = async () => {
       try {
         const res = await axios.get("http://localhost:5000/api/seats");

@@ -141,14 +141,19 @@ def populate_seats():
 @app.route('/api/allocation-data', methods=['GET'])
 def get_allocation_data():
     today_str = date.today().isoformat()
+
+    # Fetch all employees
     employees = list(users_collection.find({}, {"_id": 1, "fullName": 1}))
     for e in employees:
         e["id"] = str(e.pop("_id"))
 
-    reservations_cursor = bookings_collection.find({"date": today_str, "status": "booked"})
+    reservations_cursor = bookings_collection.find({"date": today_str})
     reserved_ids = [str(r['employeeId']) for r in reservations_cursor]
 
-    seats_available = 25 - seats_collection.count_documents({"date": today_str, "status": "booked"})
+    # Calculate available seats
+    total_seats = 25
+    seats_booked = len(reserved_ids)
+    seats_available = total_seats - seats_booked
 
     return jsonify({
         "companyName": "TCS",
@@ -156,6 +161,7 @@ def get_allocation_data():
         "seatsAvailable": seats_available,
         "reservations": reserved_ids
     })
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

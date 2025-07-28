@@ -12,6 +12,7 @@ import OfficeSpaceCalculator from './components/OfficeSpaceCalculator';
 import PrivateRoute from './components/PrivateRoute';
 
 function App() {
+  
   return (
     <AuthProvider>
       <Router>
